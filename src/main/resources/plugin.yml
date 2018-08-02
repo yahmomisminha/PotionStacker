@@ -1,0 +1,17 @@
+name: PotionStacker
+version: @version@
+main: me.stephenhendricks.potionstacker.PotionStacker
+description: With a single command, stack your entire potion inventory into stacks.
+authors: [z1haze]
+api-version: 1.13
+commands:
+  pot:
+    description: Stacks potions into like stacks up to 64
+    usage: /<command>
+    permission: potionstacker.use
+    permission-message: You don't have the <permission> permission
+  potreload:
+    description: Reloads the PotionStacker config
+    usage: /<command>
+    permission: potionstacker.reload
+    permission-message: You don't have the <permission> permission
