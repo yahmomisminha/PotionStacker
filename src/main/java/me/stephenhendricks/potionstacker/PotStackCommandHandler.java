@@ -31,6 +31,7 @@ public class PotStackCommandHandler implements CommandExecutor {
         Player player = (Player) sender;
         ItemStack[] storageContents = player.getInventory().getStorageContents();
         Map<ItemStack, Integer> potionAmounts = new HashMap<>();
+        boolean allowSplash = this.plugin.getConfig().getBoolean("allowSplash");
 
         for (ItemStack stack : storageContents) {
             if (stack == null || stack.getType() == Material.AIR) {
@@ -38,7 +39,7 @@ public class PotStackCommandHandler implements CommandExecutor {
                 continue;
             }
 
-            if (stack.getType() == Material.POTION) {
+            if (stack.getType() == Material.POTION || (allowSplash && stack.getType() == Material.SPLASH_POTION)) {
                 emptySlots++;
                 ItemStack cloned = stack.clone();
                 cloned.setAmount(1);
@@ -74,14 +75,24 @@ public class PotStackCommandHandler implements CommandExecutor {
             }
         }
 
+        if (potionStacks.size() == 0) {
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', this.plugin.getPrefix()) + ChatColor.RED + " You don't have any potions to stack.");
+            return false;
+        }
+
         if (potionStacks.size() > emptySlots) {
-            player.sendMessage(ChatColor.RED + "You don't have enough free space in your inventory.");
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', this.plugin.getPrefix()) + ChatColor.RED + " You don't have enough free space in your inventory.");
             return false;
         }
 
         player.getInventory().remove(Material.POTION);
+
+        if (allowSplash) {
+            player.getInventory().remove(Material.SPLASH_POTION);
+        }
+
         player.getInventory().addItem(potionStacks.toArray(new ItemStack[0]));
-        player.sendMessage(ChatColor.GREEN + ChatColor.translateAlternateColorCodes('&', this.plugin.getPrefix()) + " Your potions have been stacked!");
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', this.plugin.getPrefix()) + ChatColor.GREEN + " Your potions have been stacked!");
         return true;
     }
 }

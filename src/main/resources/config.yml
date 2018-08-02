@@ -1,4 +1,5 @@
 prefix: "&f&l[&3&lPotionStacker&f&l]&a"
+allowSplash: true
 stackSize:
   AWKWARD: 16
   FIRE_RESISTANCE: 16
